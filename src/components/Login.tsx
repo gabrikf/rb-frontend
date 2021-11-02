@@ -2,33 +2,52 @@ import { TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import ButtonWithLoader from "./Button";
-import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
-import { api } from "../services/api";
+
+import Alert from "./Alert";
+import { UserLoginSuccess } from "./Register";
+import { useAuth } from "../Hooks/useAuth";
+import axios from "axios";
 
 export function Login() {
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errMesasge, setErrMessage] = useState(
+    "Erro, por favor tente novamente!"
+  );
+  const { handleSetLogin } = useAuth();
   const history = useHistory();
 
   const formik = useFormik({
     initialValues: {
-      nome: "",
+      email: "",
       senha: "",
     },
-
     onSubmit: async (values) => {
+      setLoading(true);
       try {
-        const response = await api.post("users", values);
-        history.push("/login");
-      } catch (err) {
-        //   setErrorMessage(err.response.data)
+        const response = await axios.post<UserLoginSuccess>(
+          "http://localhost:6660/login",
+          values
+        );
+        handleSetLogin(response.data.token);
+        console.log(response.data);
+        history.push("/profile");
+      } catch (error: any) {
+        setErrMessage(error.response.data.error);
         setSignInError(true);
+      } finally {
+        setLoading(false);
       }
     },
   });
+
+  function setErrorToFalse() {
+    if (signInError === true) {
+      setSignInError(false);
+    }
+  }
 
   return (
     <Box
@@ -37,12 +56,34 @@ export function Login() {
         flexDirection: "column",
         gap: "10px",
       }}
+      component="form"
+      onSubmit={formik.handleSubmit}
+      onChange={setErrorToFalse}
     >
-      <Box component="form" onSubmit={formik.handleSubmit}>
-        <TextField id="outlined-basic" label="E-mail" variant="outlined" />
-        <TextField id="outlined-basic" label="Senha" variant="outlined" />
-        <ButtonWithLoader loader={loading}>Entrar</ButtonWithLoader>
-      </Box>
+      <TextField
+        name="email"
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        id="outlined-basic"
+        label="E-mail"
+        variant="outlined"
+      />
+      <TextField
+        name="senha"
+        value={formik.values.senha}
+        onChange={formik.handleChange}
+        id="outlined-basic"
+        label="Senha"
+        type={"password"}
+        variant="outlined"
+      />
+      <ButtonWithLoader loader={loading}>Entrar</ButtonWithLoader>
+      {signInError && (
+        <Alert>
+          <strong>Erro! </strong>
+          {errMesasge}
+        </Alert>
+      )}
     </Box>
   );
 }

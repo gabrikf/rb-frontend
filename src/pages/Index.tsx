@@ -7,7 +7,7 @@ import { Register } from "../components/Register";
 export function Index() {
   const [current, setCurrent] = useState("login");
   return (
-    <BoxForm>
+    <BoxForm height={"500px"}>
       <Box
         sx={{
           display: "flex",

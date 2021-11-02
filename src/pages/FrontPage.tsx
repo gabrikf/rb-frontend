@@ -2,15 +2,34 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Table from "../components/Table";
 import { BiSearchAlt2, BiTrash } from "react-icons/bi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function FrontPage() {
   const [page, setPage] = useState(1);
   const [loding, setLoading] = useState(false);
-  function changePage(val: number) {
-    setPage(val);
-    console.log(val);
-  }
+  const [content, setContent] = useState([]);
+  const [count, setCount] = useState(0);
+  const [hasNext, setHasNext] = useState(false);
+  const [pageSize, setPageSize] = useState(2);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:6660/person?itensPerPage=${pageSize}&currentPage=${page}`
+      )
+      .then((response) => {
+        console.log(page);
+        console.log(response.data);
+        setContent(response.data.data);
+        const result = response.data.count / response.data.data.length;
+        setCount(parseInt(String(result)));
+        console.log(response.data.data.length);
+        setHasNext(response.data.hasNext);
+        setLoading(false);
+      });
+  }, [page, pageSize]);
+
   const columns = [
     { field: "id", headerName: "ID", width: 200 },
     { field: "nome", headerName: "First name", width: 200 },
@@ -48,34 +67,19 @@ export function FrontPage() {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      lastName: "Snow",
-      firstName: "Jon",
-      age: 35,
-      action: "opa",
-    },
-    { id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-    { id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-    { id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-    { id: 5, lastName: "Targaryen", firstName: "Daenerys", age: 12 },
-    { id: 6, lastName: "Melisandre", firstName: "Querida", age: 150 },
-    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
-    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
-    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
-  ];
-
   return (
     <>
       <Header />
       <Table
         loader={loding}
-        rows={rows}
+        rows={content}
         columns={columns}
-        pageSize={5}
+        pageSize={pageSize}
         rowsPerPage={5}
-        pageChanger={changePage}
+        pageChanger={setPage}
+        totalPages={count}
+        currentPage={page}
+        hasNext={hasNext}
       />
     </>
   );

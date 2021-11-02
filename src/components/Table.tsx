@@ -9,8 +9,11 @@ type TableProps = {
   columns: Columns[];
   pageSize: number;
   rowsPerPage: number;
-  pageChanger: (val: number) => void;
+  pageChanger: any;
+  currentPage: number;
   loader: boolean;
+  totalPages: number;
+  hasNext: boolean;
 };
 
 type Rows = {
@@ -27,7 +30,10 @@ export default function Table({
   columns,
   pageSize,
   rowsPerPage,
+  hasNext,
+  totalPages,
   loader,
+  currentPage,
   pageChanger,
 }: TableProps) {
   if (loader) {
@@ -64,9 +70,12 @@ export default function Table({
         }}
       >
         <Box
+          onClick={() =>
+            pageChanger(currentPage !== 1 ? currentPage - 1 : currentPage)
+          }
           sx={{
             transition: "0.2s",
-            cursor: "pointer",
+            cursor: `${currentPage !== 1 ? "pointer" : "not-allowed"}`,
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],
@@ -75,11 +84,18 @@ export default function Table({
         >
           <GrPrevious />
         </Box>
-        <Box>1 de 12</Box>
+        <Box>
+          {currentPage} de {totalPages}
+        </Box>
         <Box
+          onClick={() =>
+            pageChanger(
+              currentPage !== totalPages ? currentPage + 1 : currentPage
+            )
+          }
           sx={{
             transition: "0.2s",
-            cursor: "pointer",
+            cursor: `${currentPage !== totalPages ? "pointer" : "not-allowed"}`,
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],

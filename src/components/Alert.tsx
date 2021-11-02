@@ -1,21 +1,18 @@
-import { Box } from "@mui/system";
 import { ReactNode } from "react";
+import { Alert as AlertFromMaterialUI } from "@material-ui/core";
 
 type AlertProps = {
   children: ReactNode;
+  success?: boolean;
 };
 
-export default function Alert({ children }: AlertProps) {
+export default function Alert({ children, success }: AlertProps) {
   return (
-    <Box
-      sx={{
-        bgcolor: "#F48FB1",
-        borderLeftWidth: "4px",
-        borderColor: "#D81B60",
-        padding: "12px ",
-      }}
+    <AlertFromMaterialUI
+      sx={{ border: `solid 2px ${success ? "green" : "red"}` }}
+      severity={success ? "success" : "error"}
     >
       {children}
-    </Box>
+    </AlertFromMaterialUI>
   );
 }

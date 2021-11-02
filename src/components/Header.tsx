@@ -7,12 +7,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import { Divider, Typography } from "@mui/material";
-import { RiArrowRightSLine } from "react-icons/ri";
+import { AiOutlineFullscreenExit } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { FiUsers } from "react-icons/fi";
+import { MdLogout } from "react-icons/md";
+import { useAuth } from "../Hooks/useAuth";
+import { useHistory } from "react-router-dom";
 
 export default function Header() {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const { handleLogout } = useAuth();
+  const history = useHistory();
+  function handleLogOutAndJunpToIndex() {
+    handleLogout();
+    history.push("/");
+  }
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -43,31 +52,46 @@ export default function Header() {
               border: "2px white solid",
               fontFamily: "Helvetica",
               fontSize: "14px",
+              marginRight: "10px",
             }}
           >
             G
           </Box>
+          <MdLogout
+            style={{ cursor: "pointer" }}
+            size={20}
+            onClick={handleLogOutAndJunpToIndex}
+          />
         </Toolbar>
       </AppBar>
-      <Drawer anchor={"right"} open={open} onClose={() => setOpen(false)}>
-        <div
-          style={{ display: "flex", justifyContent: "center", padding: "25px" }}
+      <Drawer
+        sx={{}}
+        anchor={"left"}
+        open={open}
+        onClose={() => setOpen(false)}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+          }}
         >
-          <RiArrowRightSLine size={24} />
-        </div>
+          <AiOutlineFullscreenExit size={24} onClick={() => setOpen(false)} />
+        </Box>
         <Divider />
         <Link
-          to={"/"}
+          to={"/profile"}
           style={{
             padding: "10px 40px",
             textDecoration: "none",
-            fontFamily: "Roboto",
+            fontFamily: "Helvetica",
           }}
         >
           <Box
             sx={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "left",
               alignItems: "center ",
               color: "black",
               gap: "10px",
@@ -77,17 +101,17 @@ export default function Header() {
           </Box>
         </Link>
         <Link
-          to={"/"}
+          to={"/peoples"}
           style={{
             padding: "10px 40px",
             textDecoration: "none",
-            fontFamily: "Roboto",
+            fontFamily: "Helvetica",
           }}
         >
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "left",
               alignItems: "center ",
               color: "black",
               gap: "10px",

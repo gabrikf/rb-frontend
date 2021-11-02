@@ -5,15 +5,17 @@ import { override } from "../utils/loadingCss";
 
 type ButtonWithLoaderProps = {
   children: ReactNode;
-  loader: boolean;
+  loader?: boolean;
+  onClickHere?: any;
 };
 
 export default function ButtonWithLoader({
   children,
   loader,
+  onClickHere,
 }: ButtonWithLoaderProps) {
   return (
-    <Button type="submit" variant="outlined">
+    <Button onClick={onClickHere} type="submit" variant="outlined">
       {loader ? (
         <ClipLoader
           color={"#BBDEFB"}

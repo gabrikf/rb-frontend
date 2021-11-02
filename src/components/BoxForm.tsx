@@ -3,9 +3,10 @@ import { ReactNode } from "react";
 
 type BoxFormProps = {
   children: ReactNode;
+  height: string;
 };
 
-export default function BoxForm({ children }: BoxFormProps) {
+export default function BoxForm({ children, height }: BoxFormProps) {
   return (
     <Box
       sx={{
@@ -22,7 +23,7 @@ export default function BoxForm({ children }: BoxFormProps) {
         sx={{
           width: "100%",
           maxWidth: "400px",
-          height: "600px",
+          height: `${height}`,
           margin: "10px",
           border: "solid 2px #29B6F6",
           borderRadius: "12px",
