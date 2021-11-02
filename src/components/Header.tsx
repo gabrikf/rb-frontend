@@ -6,10 +6,11 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
-import { Divider } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { RiArrowRightSLine } from "react-icons/ri";
 import { BiUser } from "react-icons/bi";
 import { FiUsers } from "react-icons/fi";
+
 export default function Header() {
   const [open, setOpen] = useState(true);
   return (
@@ -25,9 +26,29 @@ export default function Header() {
           >
             <MenuIcon onClick={() => setOpen(true)} />
           </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Bem-vindo
+          </Typography>
+
+          <Box
+            sx={{
+              width: 30,
+              height: 30,
+              borderRadius: "50%",
+              bgcolor: "#64B5F6",
+              display: "flex",
+              color: "white",
+              justifyContent: "center",
+              alignItems: "center",
+              border: "2px white solid",
+              fontFamily: "Helvetica",
+              fontSize: "14px",
+            }}
+          >
+            G
+          </Box>
         </Toolbar>
       </AppBar>
-
       <Drawer anchor={"right"} open={open} onClose={() => setOpen(false)}>
         <div
           style={{ display: "flex", justifyContent: "center", padding: "25px" }}
@@ -43,8 +64,8 @@ export default function Header() {
             fontFamily: "Roboto",
           }}
         >
-          <div
-            style={{
+          <Box
+            sx={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center ",
@@ -53,7 +74,7 @@ export default function Header() {
             }}
           >
             <BiUser /> <span>Meus cadastros</span>
-          </div>
+          </Box>
         </Link>
         <Link
           to={"/"}
