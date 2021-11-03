@@ -59,14 +59,13 @@ export function EditPerson() {
     enableReinitialize: true,
     onSubmit: async (values) => {
       setLoading(true);
-      console.log(age);
+
       try {
         const response = await axios.put(`http://localhost:6660/person/${id}`, {
           ...values,
           idade: age,
         });
 
-        console.log(response.data);
         history.push("/profile");
       } catch (error: any) {
         setErrMessage(error.response.data.error);
@@ -99,12 +98,10 @@ export function EditPerson() {
     return howOld < 0 ? 0 : howOld;
   }
   function callCepApi(e: FormEvent) {
-    console.log();
-
+    // a api que você solicitou me deu problema de cors, por isso estou usando essa outra.
     axios
       .get(`https://ws.apicep.com/cep/${String(e)}.json`)
       .then((response) => {
-        console.log(response.data);
         setAddress({
           cidade: response.data.city,
           uf: response.data.state,
@@ -135,6 +132,7 @@ export function EditPerson() {
       >
         <TextField
           name="nome"
+          disabled={loading}
           value={formik.values.nome}
           onChange={formik.handleChange}
           id="outlined-basic"
@@ -144,6 +142,7 @@ export function EditPerson() {
         />
         <InputMask
           mask="99/99/9999"
+          disabled={loading}
           name="dataNascimento"
           onChange={formik.handleChange}
           value={formik.values.dataNascimento}
@@ -162,6 +161,7 @@ export function EditPerson() {
         </InputMask>
         <InputMask
           mask="99999-999"
+          disabled={loading}
           name="cep"
           onChange={formik.handleChange}
           value={formik.values.cep}
@@ -181,6 +181,7 @@ export function EditPerson() {
         <TextField
           name="cidade"
           value={address?.cidade ? address?.cidade : formik.values.cidade}
+          disabled={loading}
           onChange={formik.handleChange}
           id="outlined-basic"
           label={content?.cidade ? "" : "Cidade"}
@@ -189,6 +190,7 @@ export function EditPerson() {
         />
         <TextField
           name="UF"
+          disabled={loading}
           value={address?.uf ? address?.uf : formik.values.uf}
           onChange={formik.handleChange}
           id="outlined-basic"

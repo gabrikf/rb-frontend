@@ -61,6 +61,7 @@ export function Login() {
     >
       <TextField
         name="email"
+        disabled={loading}
         value={formik.values.email}
         onChange={formik.handleChange}
         id="outlined-basic"
@@ -69,6 +70,7 @@ export function Login() {
       />
       <TextField
         name="senha"
+        disabled={loading}
         value={formik.values.senha}
         onChange={formik.handleChange}
         id="outlined-basic"

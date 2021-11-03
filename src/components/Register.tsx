@@ -78,6 +78,7 @@ export function Register() {
       onChange={setErrorToFalse}
     >
       <TextField
+        disabled={loading}
         name="email"
         onChange={formik.handleChange}
         value={formik.values.email}
@@ -92,6 +93,7 @@ export function Register() {
       )}
       <TextField
         name="senha"
+        disabled={loading}
         onChange={formik.handleChange}
         value={formik.values.senha}
         id="outlined-basic"
@@ -106,6 +108,7 @@ export function Register() {
       )}
       <TextField
         name="confirmPasswd"
+        disabled={loading}
         onChange={formik.handleChange}
         value={formik.values.confirmPasswd}
         id="outlined-basic"

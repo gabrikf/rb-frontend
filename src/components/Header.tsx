@@ -16,7 +16,7 @@ import { useHistory } from "react-router-dom";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-  const { handleLogout } = useAuth();
+  const { handleLogout, user } = useAuth();
   const history = useHistory();
   function handleLogOutAndJunpToIndex() {
     handleLogout();
@@ -55,7 +55,7 @@ export default function Header() {
               marginRight: "10px",
             }}
           >
-            G
+            {user?.email.substr(0, 1).toUpperCase()}
           </Box>
           <MdLogout
             style={{ cursor: "pointer" }}

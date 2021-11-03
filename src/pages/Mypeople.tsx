@@ -21,10 +21,8 @@ export function MyPeople() {
         `http://localhost:6660/mypeople?itensPerPage=${pageSize}&currentPage=${page}`
       )
       .then((response) => {
-        console.log(response.data.data);
         setContent(response.data.data);
         setCount(response.data.count / response.data.data.length);
-        console.log(response.data.count / response.data.data.length);
         setHasNext(response.data.hasNext);
         setLoading(false);
       });

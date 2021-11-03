@@ -20,12 +20,9 @@ export function FrontPage() {
         `http://localhost:6660/person?itensPerPage=${pageSize}&currentPage=${page}`
       )
       .then((response) => {
-        console.log(page);
-        console.log(response.data);
         setContent(response.data.data);
         const result = response.data.count / response.data.data.length;
         setCount(parseInt(String(result)));
-        console.log(response.data.data.length);
         setHasNext(response.data.hasNext);
         setLoading(false);
       });
