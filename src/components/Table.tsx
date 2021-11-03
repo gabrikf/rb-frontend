@@ -51,7 +51,7 @@ export default function Table({
           color={"#BBDEFB"}
           loading={loader}
           css={override}
-          size={150}
+          size={20}
         />
       </Box>
     );
@@ -61,50 +61,55 @@ export default function Table({
       <Box sx={{ height: 600, width: "100%", paddingTop: "20px" }}>
         <DataGrid rows={rows} columns={columns} hideFooter />
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "10px",
-          marginTop: "10px",
-        }}
-      >
+      {totalPages > 0 && (
         <Box
-          onClick={() =>
-            pageChanger(currentPage !== 1 ? currentPage - 1 : currentPage)
-          }
           sx={{
-            transition: "0.2s",
-            cursor: `${currentPage !== 1 ? "pointer" : "not-allowed"}`,
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
+            display: "flex",
+            justifyContent: "center",
+            gap: "10px",
+            marginTop: "10px",
           }}
         >
-          <GrPrevious />
+          <Box
+            onClick={() =>
+              pageChanger(currentPage !== 1 ? currentPage - 1 : currentPage)
+            }
+            sx={{
+              transition: "0.2s",
+              cursor: `${currentPage !== 1 ? "pointer" : "not-allowed"}`,
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <GrPrevious />
+          </Box>
+
+          <Box>
+            {currentPage} de {totalPages}
+          </Box>
+          <Box
+            onClick={() =>
+              pageChanger(
+                currentPage !== totalPages ? currentPage + 1 : currentPage
+              )
+            }
+            sx={{
+              transition: "0.2s",
+              cursor: `${
+                currentPage !== totalPages ? "pointer" : "not-allowed"
+              }`,
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+            }}
+          >
+            <GrNext />
+          </Box>
         </Box>
-        <Box>
-          {currentPage} de {totalPages}
-        </Box>
-        <Box
-          onClick={() =>
-            pageChanger(
-              currentPage !== totalPages ? currentPage + 1 : currentPage
-            )
-          }
-          sx={{
-            transition: "0.2s",
-            cursor: `${currentPage !== totalPages ? "pointer" : "not-allowed"}`,
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-          }}
-        >
-          <GrNext />
-        </Box>
-      </Box>
+      )}
     </>
   );
 }

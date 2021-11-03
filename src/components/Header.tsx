@@ -7,7 +7,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
 import Drawer from "@mui/material/Drawer";
 import { Divider, Typography } from "@mui/material";
-import { AiOutlineFullscreenExit } from "react-icons/ai";
+import { AiOutlineFullscreenExit, AiOutlinePlus } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { FiUsers } from "react-icons/fi";
 import { MdLogout } from "react-icons/md";
@@ -64,12 +64,7 @@ export default function Header() {
           />
         </Toolbar>
       </AppBar>
-      <Drawer
-        sx={{}}
-        anchor={"left"}
-        open={open}
-        onClose={() => setOpen(false)}
-      >
+      <Drawer anchor={"left"} open={open} onClose={() => setOpen(false)}>
         <Box
           sx={{
             display: "flex",
@@ -118,6 +113,26 @@ export default function Header() {
             }}
           >
             <FiUsers /> <span>Todos os cadastros</span>
+          </div>
+        </Link>
+        <Link
+          to={"/create"}
+          style={{
+            padding: "10px 40px",
+            textDecoration: "none",
+            fontFamily: "Helvetica",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "left",
+              alignItems: "center ",
+              color: "black",
+              gap: "10px",
+            }}
+          >
+            <AiOutlinePlus /> <span>Criar pessoa</span>
           </div>
         </Link>
       </Drawer>

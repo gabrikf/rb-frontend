@@ -4,7 +4,6 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import ButtonWithLoader from "./Button";
 import * as Yup from "yup";
-
 import { useHistory } from "react-router-dom";
 import Alert from "./Alert";
 import { useAuth } from "../Hooks/useAuth";
@@ -19,7 +18,6 @@ const userSchema = Yup.object().shape({
   email: Yup.string()
     .email("Por favor, digite um e-mail válido")
     .required("Por favor, informe um e-mail."),
-
   senha: Yup.string()
     .min(8, "Por favor, informe uma senha com pelo menos 8 caracteres.")
     .required("Por favor, informe uma senha."),
@@ -52,11 +50,9 @@ export function Register() {
           values
         );
         handleSetLogin(response.data.token);
-        console.log(response.data);
-        history.push("/profile");
+        history.push("/peoples");
       } catch (error: any) {
         setErrMessage(error.response.data.error);
-
         setSignInError(true);
       } finally {
         setLoading(false);

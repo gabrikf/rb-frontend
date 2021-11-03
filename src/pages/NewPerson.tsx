@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import ButtonWithLoader from "../components/Button";
 import Alert from "../components/Alert";
 import InputMask from "react-input-mask";
+import * as Yup from "yup";
 
 import axios from "axios";
 
@@ -15,10 +16,21 @@ type Address = {
   uf: string;
 };
 
+const personSchema = Yup.object().shape({
+  nome: Yup.string()
+    .min(3, "Por favor informe um nome com no mínimo 3 caracteres")
+    .required("Por favor, informe um nome."),
+  dataNascimento: Yup.string().required(
+    "Por favor, informe uma data de nascimento."
+  ),
+  cep: Yup.string().required("Por favor, informe um e-mail."),
+});
+
 export function NewPerson() {
   const [loading, setLoading] = useState(false);
   const [signInError, setSignInError] = useState(false);
   const [address, setAddress] = useState<Address>();
+  const [age, setAge] = useState(0);
   const [errMesasge, setErrMessage] = useState(
     "Erro, por favor tente novamente!"
   );
@@ -32,21 +44,15 @@ export function NewPerson() {
       cidade: address?.cidade,
       uf: address?.uf,
     },
+    validationSchema: personSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      console.log(values);
-      const formatedDate = values.dataNascimento.split("-");
-      const dd = formatedDate[0];
-      const mm = formatedDate[1];
-      const aaaa = formatedDate[2];
-      const newValues = {
-        ...values,
-        dataNascimento: `${aaaa}-${mm}-${dd}`,
-      };
+      console.log(age);
       try {
         const response = await axios.post("http://localhost:6660/person", {
-          ...newValues,
+          ...values,
           ...address,
+          idade: age,
         });
 
         console.log(response.data);
@@ -59,7 +65,28 @@ export function NewPerson() {
       }
     },
   });
+  function getYears(date: string) {
+    const fullDate = date.split("/");
+    const day = fullDate[0];
+    const month = fullDate[1];
+    const year = fullDate[2];
 
+    var d = new Date();
+    const thisYear = d.getFullYear();
+    const thisMonth = d.getMonth() + 1;
+    const thisDay = d.getDate();
+
+    let howOld = thisYear - Number(year);
+
+    if (
+      Number(thisMonth) < Number(month) ||
+      (Number(thisMonth) === Number(month) && Number(thisDay) < Number(day))
+    ) {
+      howOld--;
+    }
+    setAge(howOld);
+    return howOld < 0 ? 0 : howOld;
+  }
   function callCepApi(e: FormEvent) {
     console.log();
 
@@ -80,7 +107,7 @@ export function NewPerson() {
     }
   }
   return (
-    <BoxForm height={"600px"}>
+    <BoxForm height={"750px"}>
       <Box
         sx={{
           display: "flex",
@@ -104,11 +131,17 @@ export function NewPerson() {
           type={"text"}
           variant="outlined"
         />
+        {formik.errors.nome && formik.touched.nome && (
+          <Box component="span" sx={{ fontStyle: "italic", color: "#EF5350" }}>
+            {formik.errors.nome}
+          </Box>
+        )}
         <InputMask
-          mask="99-99-9999"
+          mask="99/99/9999"
           name="dataNascimento"
           onChange={formik.handleChange}
           value={formik.values.dataNascimento}
+          onBlur={(e: any) => getYears(e.target.value)}
         >
           {(inputProps: any) => (
             <TextField
@@ -121,6 +154,11 @@ export function NewPerson() {
             />
           )}
         </InputMask>
+        {formik.errors.dataNascimento && formik.touched.dataNascimento && (
+          <Box component="span" sx={{ fontStyle: "italic", color: "#EF5350" }}>
+            {formik.errors.dataNascimento}
+          </Box>
+        )}
         <InputMask
           mask="99999-999"
           name="cep"
@@ -138,7 +176,11 @@ export function NewPerson() {
             />
           )}
         </InputMask>
-
+        {formik.errors.cep && formik.touched.cep && (
+          <Box component="span" sx={{ fontStyle: "italic", color: "#EF5350" }}>
+            {formik.errors.cep}
+          </Box>
+        )}
         <TextField
           name="cidade"
           value={address?.cidade ? address?.cidade : formik.values.cidade}

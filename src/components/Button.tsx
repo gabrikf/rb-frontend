@@ -21,7 +21,7 @@ export default function ButtonWithLoader({
           color={"#BBDEFB"}
           loading={loader}
           css={override}
-          size={150}
+          size={20}
         />
       ) : (
         children

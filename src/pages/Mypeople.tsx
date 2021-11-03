@@ -4,6 +4,7 @@ import Table from "../components/Table";
 import { BiSearchAlt2, BiTrash } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Box } from "@mui/system";
 
 export function MyPeople() {
   const [page, setPage] = useState(1);
@@ -29,17 +30,23 @@ export function MyPeople() {
       });
   }, [page, pageSize]);
 
+  function handleDeleteRow(id: number) {
+    axios.delete(`http://localhost:6660/person/${id}`);
+    setContent(content.filter((item: any) => item.id !== id));
+  }
+
   const columns = [
-    { field: "id", headerName: "ID", width: 200 },
-    { field: "nome", headerName: "First name", width: 200 },
-    { field: "dataNascimento", headerName: "Last name", width: 200 },
-    { field: "cep", headerName: "ID", width: 200 },
-    { field: "cidade", headerName: "First name", width: 200 },
-    { field: "uf", headerName: "Last name", width: 200 },
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "nome", headerName: "Nome", width: 150 },
+    { field: "dataNascimento", headerName: "Data de Nascimento", width: 220 },
+    { field: "idade", headerName: "Idade", width: 150 },
+    { field: "cep", headerName: "CEP", width: 150 },
+    { field: "cidade", headerName: "Cidade", width: 200 },
+    { field: "uf", headerName: "Uf", width: 100 },
     {
       field: "edit",
       headerName: "Editar",
-      width: 150,
+      width: 130,
       align: "right",
       headerAlign: "right",
       renderCell: (cellValues: any) => {
@@ -53,14 +60,17 @@ export function MyPeople() {
     {
       field: "delete",
       headerName: "Deletar",
-      width: 150,
+      width: 140,
       headerAlign: "right",
       align: "right",
       renderCell: (cellValues: any) => {
         return (
-          <Link to={`edit/${cellValues.row.id}`}>
+          <Box
+            sx={{ cursor: "pointer" }}
+            onClick={() => handleDeleteRow(cellValues.row.id)}
+          >
             <BiTrash color={"black"} />
-          </Link>
+          </Box>
         );
       },
     },

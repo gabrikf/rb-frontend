@@ -32,8 +32,7 @@ export function Login() {
           values
         );
         handleSetLogin(response.data.token);
-        console.log(response.data);
-        history.push("/profile");
+        history.push("/peoples");
       } catch (error: any) {
         setErrMessage(error.response.data.error);
         setSignInError(true);

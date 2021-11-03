@@ -12,7 +12,7 @@ type User = {
 type AuthContextData = {
   user: User | null;
   isSignIn: boolean;
-  handleSetLogin: (token: string) => void;
+  handleSetLogin: (token: string) => Promise<void>;
   handleLogout: () => void;
 };
 
@@ -26,20 +26,20 @@ function AuthProvider({ children }: AuthProviderProps) {
   const [isSignIn, setIsSignIn] = useState(true);
   const [user, setUser] = useState<User | null>(null);
 
-  function handleSetLogin(token: string) {
+  async function handleSetLogin(token: string) {
     try {
-      setIsSignIn(true);
+      await setIsSignIn(true);
       let payload: any = token.split(".")[1];
       payload = atob(payload);
       payload = JSON.parse(payload);
       const id = payload.id;
       const email = payload.email;
 
-      setUser({
+      await setUser({
         id,
         email,
       });
-      localStorage.setItem("@token", token);
+      await localStorage.setItem("@token", token);
     } catch (e) {
       handleLogout();
     } finally {
@@ -57,8 +57,8 @@ function AuthProvider({ children }: AuthProviderProps) {
     if (storageToken) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${storageToken}`;
       handleSetLogin(storageToken);
-      setIsSignIn(false);
     }
+    setIsSignIn(false);
   }, []);
 
   if (isSignIn) {
@@ -76,7 +76,7 @@ function AuthProvider({ children }: AuthProviderProps) {
           color={"#BBDEFB"}
           loading={isSignIn}
           css={override}
-          size={150}
+          size={20}
         />
       </Box>
     );
